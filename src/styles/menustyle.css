@@ -1,0 +1,89 @@
+body{
+    perspective: 100w;
+}
+
+.threeD-button-set {
+    --distance: 1px;
+    --theme: rgba(24, 194, 194, 0.909);
+    --theme-bg: rgba(0, 255, 255, 0.25);
+    --theme-bg-hover: hsl(180 100% 50% / 40%);
+    --theme-text: white;
+    --theme-shadow: hsl(180, 100%, 10% / 100%);
+    /* --theme-shadow: hsl(180 100% 10% / 25%); */
+  
+
+    --_btn-bg: var(--theme-bg);
+    --_btn-bg-hover: var(--theme-bg-hover);
+    --_btn-text: var(--theme-text);
+    --_btn-text-shadow: var(--theme-shadow);
+    --_bounce-ease: cubic-bezier(.5, 1.75, .75, 1.25);
+  
+
+    
+
+  /* vertical rag-right layout */
+    /*flex;*/
+    display: grid;
+    margin: 0 auto;
+    list-style-position: center;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top:30%;
+    left:43%;
+    transform: translate(-50, -50);
+
+    
+}
+
+
+  .threeD-button-set button {
+    /* strip out default button styles */
+    
+    appearance: none;
+    outline: none;
+    border: none;
+    /* bring in brand styles via props */
+    background-color: var(--_btn-bg);
+    color: var(--_btn-text);
+    text-shadow: 0 1px 1px var(--_btn-text-shadow);
+  
+    /* large text rounded corner and padded*/
+    font-size: 5vmin;
+    font-family: Audiowide;
+
+    
+    padding-block: .75ch;
+    /* padding-inline: 2ch;  */
+    border-radius: 5px 20px;
+    margin-bottom: 8px;
+    text-align: center;
+   
+    width: 6em;
+
+  }
+
+  .threeD-button-set button:hover {
+    background-color: rgba(24, 194, 194, 0.909);;
+  }
+
+.loading-bar
+{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #ffffff;
+    transform: scaleX(0);
+    transform-origin: top left;
+    transition: transform 0.7s;
+    will-change: transform;
+}
+
+.loading-bar.ended
+{
+    transform-origin: top right;
+    transition: transform 1.5s ease-in-out;
+}
+
+
