@@ -196,7 +196,7 @@ audioLoader.load('sounds/ComeOutOfHyperSpace.mp3', function (buffer) {
 
 const newGameButton = document.querySelector('button.newGame')
 newGameButton.addEventListener('click', () => {
-    window.open('spacebattlescript.js')
+    window.open('spacebattle.html')
 })
 
 const musicButton = document.querySelector('button.noise')
