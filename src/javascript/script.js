@@ -14,20 +14,25 @@ import fragmentShader from '/static/shaders/test/fragment.glsl'
 /**
  * Loaders
  */
- /**
- * Loaders
- */
+/**
+* Loaders
+*/
+
+
+/*
+
+hey liam i am adding some code hereeeee
+
+*/
 
 const loadingBarElement = document.querySelector('.loading-bar')
 const loadingManager = new THREE.LoadingManager(
     // Loaded
-    () =>
-    {
+    () => {
         // Wait a little
-        window.setTimeout(() =>
-        {
+        window.setTimeout(() => {
             // Animate overlay
-            gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0, delay: 1,})
+            gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0, delay: 1, })
 
             // Update loadingBarElement
             loadingBarElement.classList.add('ended')
@@ -36,18 +41,17 @@ const loadingManager = new THREE.LoadingManager(
     },
 
     // Progress
-    (itemUrl, itemsLoaded, itemsTotal) =>
-    {
+    (itemUrl, itemsLoaded, itemsTotal) => {
         // Calculate the progress and update the loadingBarElement
         const progressRatio = itemsLoaded / itemsTotal
         loadingBarElement.style.transform = `scaleX(${progressRatio})`
         //console.log(progressRatio) 
-        
+
     }
 )
 const gltfLoader = new GLTFLoader(loadingManager)
 
-const cubeTextureLoader= new THREE.CubeTextureLoader(loadingManager)
+const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
 
 const textureLoader = new THREE.TextureLoader(loadingManager)
 
@@ -56,7 +60,7 @@ const fontLoader = new THREE.FontLoader(loadingManager)
 const audioLoader = new THREE.AudioLoader(loadingManager)
 
 
- 
+
 
 
 
@@ -68,7 +72,7 @@ const audioLoader = new THREE.AudioLoader(loadingManager)
 //  const gui = new dat.GUI()
 const debugObject = {}
 
- //Stats
+//Stats
 //  const stats = new Stats()
 //  stats.showPanel(0)
 //  document.body.appendChild(stats.dom)
@@ -87,20 +91,20 @@ const scene = new THREE.Scene()
  * Overlay
  */
 
- const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
- const overlayMaterial = new THREE.ShaderMaterial({
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1)
+const overlayMaterial = new THREE.ShaderMaterial({
     transparent: true,
-     uniforms:
-     {
-         uAlpha: { value : 1 }
-     },
-     vertexShader: `
+    uniforms:
+    {
+        uAlpha: { value: 1 }
+    },
+    vertexShader: `
          void main()
          {
              gl_Position = vec4(position, 1.0);
          }
      `,
-     fragmentShader: `
+    fragmentShader: `
          uniform float uAlpha;
  
          void main()
@@ -108,33 +112,30 @@ const scene = new THREE.Scene()
              gl_FragColor = vec4( 0.0, 0.0, 0.0, uAlpha);
          }
      `
- 
- })
- const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
- scene.add(overlay)
+
+})
+const overlay = new THREE.Mesh(overlayGeometry, overlayMaterial)
+scene.add(overlay)
 
 
 /**
  * Update All Materials
  */
- const updateAllMaterials = () =>
- {
-     scene.traverse((child) =>
-     {
-         if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial)
-         {
-             child.material.envMap = environmentMap
-             child.material.envMapIntensity = debugObject.envMapIntensity
-             child.material.needsUpdate = true
-             child.castShadow = true
-             child.receiveShadow = true
-         }
-     })
- }
+const updateAllMaterials = () => {
+    scene.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
+            child.material.envMap = environmentMap
+            child.material.envMapIntensity = debugObject.envMapIntensity
+            child.material.needsUpdate = true
+            child.castShadow = true
+            child.receiveShadow = true
+        }
+    })
+}
 
- /**
- * Environment Map
- */
+/**
+* Environment Map
+*/
 const environmentMap = cubeTextureLoader.load([
     '/textures/space/ulukai-bluered-deepred/corona_ft.png', // positive x
     '/textures/space/ulukai-bluered-deepred/corona_bk.png', // negative x
@@ -142,48 +143,48 @@ const environmentMap = cubeTextureLoader.load([
     '/textures/space/ulukai-bluered-deepred/corona_dn.png', // negative y
     '/textures/space/ulukai-bluered-deepred/corona_rt.png', // positive z
     '/textures/space/ulukai-bluered-deepred/corona_lf.png' // negative z
- ])
+])
 environmentMap.encoding = THREE.sRGBEncoding
 scene.background = environmentMap
 scene.environment = environmentMap
 
- debugObject.envMapIntensity = 5
- 
- //Audio
+debugObject.envMapIntensity = 5
+
+//Audio
 const backgroundSound = new THREE.Audio(listener)
 var tieFighterShotSound = new THREE.Audio(listener)
 var tieFighterFlightSound0 = new THREE.PositionalAudio(listener)
 var tieFighterFlightSound1 = new THREE.PositionalAudio(listener)
 var starDestoyerOutHyperSpaceSound = new THREE.PositionalAudio(listener)
 
-audioLoader.load( 'sounds/music/BattleInTheSnowTrimmed.mp3', function( buffer ) {
-	backgroundSound.setBuffer( buffer )
-	backgroundSound.setLoop(true)
-	backgroundSound.setVolume(0.5)
+audioLoader.load('sounds/music/BattleInTheSnowTrimmed.mp3', function (buffer) {
+    backgroundSound.setBuffer(buffer)
+    backgroundSound.setLoop(true)
+    backgroundSound.setVolume(0.5)
 })
 
-audioLoader.load('sounds/TIE fighter fire 1.mp3', function( buffer ) {
-    tieFighterShotSound.setBuffer( buffer )
+audioLoader.load('sounds/TIE fighter fire 1.mp3', function (buffer) {
+    tieFighterShotSound.setBuffer(buffer)
     tieFighterShotSound.setLoop(false)
     tieFighterShotSound.setVolume(0.6)
 })
 
-audioLoader.load('sounds/SOUND EFFECT_ Star Wars - TIE-Fighter Flying.mp3', function( buffer ) {
-    tieFighterFlightSound0.setBuffer( buffer )
+audioLoader.load('sounds/SOUND EFFECT_ Star Wars - TIE-Fighter Flying.mp3', function (buffer) {
+    tieFighterFlightSound0.setBuffer(buffer)
     tieFighterFlightSound0.setLoop(true)
     tieFighterFlightSound0.setVolume(0.6)
     tieFighterFlightSound0.setRefDistance(0.75)
 })
 
-audioLoader.load('sounds/SOUND EFFECT_ Star Wars - TIE-Fighter Flying.mp3', function( buffer ) {
-    tieFighterFlightSound1.setBuffer( buffer )
+audioLoader.load('sounds/SOUND EFFECT_ Star Wars - TIE-Fighter Flying.mp3', function (buffer) {
+    tieFighterFlightSound1.setBuffer(buffer)
     tieFighterFlightSound1.setLoop(true)
     tieFighterFlightSound1.setVolume(0.6)
     tieFighterFlightSound1.setRefDistance(0.75)
 })
 
-audioLoader.load('sounds/ComeOutOfHyperSpace.mp3', function( buffer ) {
-    starDestoyerOutHyperSpaceSound.setBuffer( buffer )
+audioLoader.load('sounds/ComeOutOfHyperSpace.mp3', function (buffer) {
+    starDestoyerOutHyperSpaceSound.setBuffer(buffer)
     starDestoyerOutHyperSpaceSound.setLoop(false)
     starDestoyerOutHyperSpaceSound.setVolume(2)
     starDestoyerOutHyperSpaceSound.setRefDistance(8)
@@ -193,31 +194,26 @@ audioLoader.load('sounds/ComeOutOfHyperSpace.mp3', function( buffer ) {
 //console.log(tieFighterFlightSound.getRefDistance())
 
 const newGameButton = document.querySelector('button.newGame')
-newGameButton.addEventListener('click', () =>
-{
+newGameButton.addEventListener('click', () => {
     window.open('spacebattlescript.js')
 })
 
 const musicButton = document.querySelector('button.noise')
 
-musicButton.addEventListener('click', () =>
-{
-    if (backgroundSound.isPlaying == true)
-    {
+musicButton.addEventListener('click', () => {
+    if (backgroundSound.isPlaying == true) {
         backgroundSound.stop()
     }
-    else
-    {
+    else {
         backgroundSound.play()
-    } 
+    }
 
 })
 
 const closeButton = document.querySelector('button.close')
-closeButton.addEventListener('click', () =>
-{
+closeButton.addEventListener('click', () => {
     window.close()
-    
+
 })
 
 /**
@@ -259,33 +255,30 @@ closeButton.addEventListener('click', () =>
 // )
 // }
 
-for (let i =0; i < 3; i++)
-{
+for (let i = 0; i < 3; i++) {
     gltfLoader.load(
         '/models/capitalships/star_destroyer/scene.gltf',
-        (gltf) =>
-        {
+        (gltf) => {
             gltf.scene.scale.set(1.2, 1.2, 1.2)
-           
-            switch (i)
-            {
-                case 0: gltf.scene.position.set(0, 8.2, -55)
-                scene.add(gltf.scene)
-                gsap.to(gltf.scene.position, {z: -6.5, duration:0.15, delay: 6, onComplete: function(){starDestoyerOutHyperSpaceSound.play()}})
-                break
 
-                case 1:  gltf.scene.position.set(18.5, 8.2, -55)
-                scene.add(gltf.scene)
-                gsap.to(gltf.scene.position, {z: -15, duration:0.15, delay: 6.5, onComplete: function(){starDestoyerOutHyperSpaceSound.play()}})
-                break
+            switch (i) {
+                case 0: gltf.scene.position.set(0, 8.2, -55)
+                    scene.add(gltf.scene)
+                    gsap.to(gltf.scene.position, { z: -6.5, duration: 0.15, delay: 6, onComplete: function () { starDestoyerOutHyperSpaceSound.play() } })
+                    break
+
+                case 1: gltf.scene.position.set(18.5, 8.2, -55)
+                    scene.add(gltf.scene)
+                    gsap.to(gltf.scene.position, { z: -15, duration: 0.15, delay: 6.5, onComplete: function () { starDestoyerOutHyperSpaceSound.play() } })
+                    break
 
                 case 2: gltf.scene.position.set(-18.5, 8.2, -55)
-                scene.add(gltf.scene)
-                gsap.to(gltf.scene.position, {z: -15, duration:0.15, delay: 6.75,onComplete: function(){starDestoyerOutHyperSpaceSound.play()}})
-                break
+                    scene.add(gltf.scene)
+                    gsap.to(gltf.scene.position, { z: -15, duration: 0.15, delay: 6.75, onComplete: function () { starDestoyerOutHyperSpaceSound.play() } })
+                    break
             }
             //starDestroyer.push(gltf.scene)
-            
+
             //gltf.scene.position.set(0, 8.2, -90)
             gltf.scene.rotation.y = Math.PI
             //scene.add(gltf.scene)
@@ -303,22 +296,19 @@ for (let i =0; i < 3; i++)
 
 
 
-for (let i =0; i < 2; i++)
-{
+for (let i = 0; i < 2; i++) {
     gltfLoader.load(
         '/models/starfighters/tie-fighter_from_star_wars/scene.gltf',
-        (gltf) =>
-        {
+        (gltf) => {
             gltf.scene.scale.set(0.004, 0.004, 0.004)
-            
+
             //gltf.scene.position.set(-18.5 + (-0.7 *i), 7.83, -12.83) //group two position
             //gltf.scene.position.set(18.5 + (0.7 *i), 7.83, -12.83) //group three position
             gltf.scene.rotation.y = Math.PI * 2
-            
-            
-            if (i == 0)
-            {
-                gsap.to(gltf.scene.position, {x:-0.81, y: 7.45, z:-3.73, delay: 6.2, onComplete: function() {scene.add(gltf.scene)}})
+
+
+            if (i == 0) {
+                gsap.to(gltf.scene.position, { x: -0.81, y: 7.45, z: -3.73, delay: 6.2, onComplete: function () { scene.add(gltf.scene) } })
                 gltf.scene.add(tieFighterFlightSound0)
                 let tl1 = gsap.timeline({
                     paused: false,
@@ -326,88 +316,90 @@ for (let i =0; i < 2; i++)
                     delay: 6
                 })
                 tl1.set(gltf.scene.position,  //load tiefighter in the hangar
-                        {x:-0.81, y: 7.45, z:-3.73, delay: 3.7})
-                tl1.to(gltf.scene.position, 
-                    {y: 7.45 - 3, 
-                    x: gltf.scene.position.x -1,
-                    duration:1,
-                    onStart: function()
+                    { x: -0.81, y: 7.45, z: -3.73, delay: 3.7 })
+                tl1.to(gltf.scene.position,
                     {
-                        gltf.scene.lookAt(camera.position)
-                        tieFighterFlightSound0.play()
-                    },
-                    onComplete: function()
-                    {
-                        // gltf.scene.lookAt(camera.position)
-                    }}) //the y-axis is being buggy, hardcode it // add delay when finished
-                
+                        y: 7.45 - 3,
+                        x: gltf.scene.position.x - 1,
+                        duration: 1,
+                        onStart: function () {
+                            gltf.scene.lookAt(camera.position)
+                            tieFighterFlightSound0.play()
+                        },
+                        onComplete: function () {
+                            // gltf.scene.lookAt(camera.position)
+                        }
+                    }) //the y-axis is being buggy, hardcode it // add delay when finished
+
                 tl1.to(gltf.scene.position, //launch tiefighter towards camera
-                {x: camera.position.x - 0.8, 
-                    y: camera.position.y - 2, 
-                    z: camera.position.z +10, 
-                    duration:2,
-                    onComplete: function() 
                     {
-                    tieFighterFlightSound0.stop()
-                    }
-                })
+                        x: camera.position.x - 0.8,
+                        y: camera.position.y - 2,
+                        z: camera.position.z + 10,
+                        duration: 2,
+                        onComplete: function () {
+                            tieFighterFlightSound0.stop()
+                        }
+                    })
 
 
-                tl1.set(gltf.scene.position ,{x:-19.2, y: 7.83, z:-12.83}) //reset for second star destroyer
-                
-                tl1.to(gltf.scene.position, 
-                    {y: 7.83 - 3,
-                    x: -19.2 -1,
-                    duration:1.5,
-                    onStart: function()
+                tl1.set(gltf.scene.position, { x: -19.2, y: 7.83, z: -12.83 }) //reset for second star destroyer
+
+                tl1.to(gltf.scene.position,
                     {
-                        gltf.scene.lookAt(camera.position)
-                        tieFighterFlightSound0.play()
-                    },
-                    onComplete: function()
-                    {
-                        //gltf.scene.lookAt(camera.position)
-                    }}) //the y-axis is being buggy, hardcode it //release tiefighters from destroyer
+                        y: 7.83 - 3,
+                        x: -19.2 - 1,
+                        duration: 1.5,
+                        onStart: function () {
+                            gltf.scene.lookAt(camera.position)
+                            tieFighterFlightSound0.play()
+                        },
+                        onComplete: function () {
+                            //gltf.scene.lookAt(camera.position)
+                        }
+                    }) //the y-axis is being buggy, hardcode it //release tiefighters from destroyer
                 tl1.to(gltf.scene.position, //launch tiefighter towards camera
-                    {x: camera.position.x + 2.8, 
-                     y: camera.position.y - 2, 
-                     z: camera.position.z +10, 
-                     duration:1.5,
-                    onComplete: function()
                     {
-                        tieFighterFlightSound0.stop()
-                    }})
-                
-                
-                tl1.set(gltf.scene.position ,{x:19.2, y: 7.83, z:-12.83}) //reset for third star destroyer
-                    
-                tl1.to(gltf.scene.position, 
-                    {y: 7.83 - 3,
-                    x: 19.2 +1,
-                    duration:1.5,
-                    onStart: function()
+                        x: camera.position.x + 2.8,
+                        y: camera.position.y - 2,
+                        z: camera.position.z + 10,
+                        duration: 1.5,
+                        onComplete: function () {
+                            tieFighterFlightSound0.stop()
+                        }
+                    })
+
+
+                tl1.set(gltf.scene.position, { x: 19.2, y: 7.83, z: -12.83 }) //reset for third star destroyer
+
+                tl1.to(gltf.scene.position,
                     {
-                        gltf.scene.lookAt(camera.position)
-                        tieFighterFlightSound0.play()
-                        
-                    }}) //the y-axis is being buggy, hardcode it //release tiefighters from destroyer
-                
+                        y: 7.83 - 3,
+                        x: 19.2 + 1,
+                        duration: 1.5,
+                        onStart: function () {
+                            gltf.scene.lookAt(camera.position)
+                            tieFighterFlightSound0.play()
+
+                        }
+                    }) //the y-axis is being buggy, hardcode it //release tiefighters from destroyer
+
                 tl1.to(gltf.scene.position, //launch tiefighter towards camera
-                    {x: camera.position.x - 3.8, 
-                    y: camera.position.y - 2, 
-                     z: camera.position.z +10, 
-                    duration:1.5,
-                    onComplete: function()
                     {
-                        tieFighterFlightSound0.stop()
-                    }})
-                    
+                        x: camera.position.x - 3.8,
+                        y: camera.position.y - 2,
+                        z: camera.position.z + 10,
+                        duration: 1.5,
+                        onComplete: function () {
+                            tieFighterFlightSound0.stop()
+                        }
+                    })
+
             }
 
-            if (i ==  1)
-            {
-                
-                gsap.to(gltf.scene.position, {x:-0.21, y: 7.45, z:-3.73, delay: 6.2, onComplete: function() {scene.add(gltf.scene)}})
+            if (i == 1) {
+
+                gsap.to(gltf.scene.position, { x: -0.21, y: 7.45, z: -3.73, delay: 6.2, onComplete: function () { scene.add(gltf.scene) } })
                 let tl2 = gsap.timeline({
                     paused: false,
                     repeat: -1,
@@ -416,96 +408,100 @@ for (let i =0; i < 2; i++)
                 gltf.scene.add(tieFighterFlightSound1)
 
                 tl2.set(gltf.scene.position,  //set in the first star destroyer
-                    {x:-0.21, y: 7.45, z:-3.73, delay: 3.7})
+                    { x: -0.21, y: 7.45, z: -3.73, delay: 3.7 })
 
-                
+
                 tl2.to(gltf.scene.position, // release from the star destoyer
-                    {y: 7.45 - 3,
-                    x: gltf.scene.position.x +1,
-                    duration:1,
-                    onStart: function()
                     {
-                        gltf.scene.lookAt(camera.position)
-                        tieFighterFlightSound1.play()
-                    }}) 
-                
-
-                tl2.to(gltf.scene.position, // launch towards the camera
-                    {x: camera.position.x + 0.8, 
-                     y: camera.position.y - 2, 
-                     z: camera.position.z +10, 
-                     duration:1.2, 
-                     onUpdate: function()
-                     {
-                        
-                        
-                     },
-                     onComplete: function() 
-                     {
-                        tieFighterFlightSound1.stop()
-                     }
+                        y: 7.45 - 3,
+                        x: gltf.scene.position.x + 1,
+                        duration: 1,
+                        onStart: function () {
+                            gltf.scene.lookAt(camera.position)
+                            tieFighterFlightSound1.play()
+                        }
                     })
 
-                tl2.set(gltf.scene.position ,{x:-18.5, y: 7.83, z:-12.83})
 
-                
-                tl2.to(gltf.scene.position,  //release from the star destroyer
-                    {y: 7.83 - 3, 
-                    x: -18.5 +1,
-                    duration:1.5,
-                    onStart: function()
-                    {
-                        gltf.scene.lookAt(camera.position)
-                        tieFighterFlightSound1.play()
-                    }}) 
-                
                 tl2.to(gltf.scene.position, // launch towards the camera
-                    {x: camera.position.x + 3.6, 
-                    y: camera.position.y - 2, 
-                    z: camera.position.z +10, 
-                    duration:2,
-                    onComplete: function()
-                {
-                    tieFighterFlightSound1.stop()
-                }})
-
-                tl2.set(gltf.scene.position ,{x:18.5, y: 7.83, z:-12.83}) //set the tieFighter in the third star destroyer
-
-                tl2.to(gltf.scene.position, 
-                    {y: 7.83 - 3, 
-                    x: 18.5 -1,
-                    duration:1.5,
-                    onStart: function()
                     {
-                        tieFighterFlightSound1.play()
-                        gltf.scene.lookAt(camera.position)
-                    }}) 
+                        x: camera.position.x + 0.8,
+                        y: camera.position.y - 2,
+                        z: camera.position.z + 10,
+                        duration: 1.2,
+                        onUpdate: function () {
 
-                
-                tl2.to(gltf.scene.position, 
-                    {x: camera.position.x - 4.6, 
-                    y: camera.position.y - 2, 
-                    z: camera.position.z +10, 
-                    duration:2,
-                    onComplete: function()
+
+                        },
+                        onComplete: function () {
+                            tieFighterFlightSound1.stop()
+                        }
+                    })
+
+                tl2.set(gltf.scene.position, { x: -18.5, y: 7.83, z: -12.83 })
+
+
+                tl2.to(gltf.scene.position,  //release from the star destroyer
                     {
-                        tieFighterFlightSound1.stop()
-                    }})
-                
+                        y: 7.83 - 3,
+                        x: -18.5 + 1,
+                        duration: 1.5,
+                        onStart: function () {
+                            gltf.scene.lookAt(camera.position)
+                            tieFighterFlightSound1.play()
+                        }
+                    })
+
+                tl2.to(gltf.scene.position, // launch towards the camera
+                    {
+                        x: camera.position.x + 3.6,
+                        y: camera.position.y - 2,
+                        z: camera.position.z + 10,
+                        duration: 2,
+                        onComplete: function () {
+                            tieFighterFlightSound1.stop()
+                        }
+                    })
+
+                tl2.set(gltf.scene.position, { x: 18.5, y: 7.83, z: -12.83 }) //set the tieFighter in the third star destroyer
+
+                tl2.to(gltf.scene.position,
+                    {
+                        y: 7.83 - 3,
+                        x: 18.5 - 1,
+                        duration: 1.5,
+                        onStart: function () {
+                            tieFighterFlightSound1.play()
+                            gltf.scene.lookAt(camera.position)
+                        }
+                    })
+
+
+                tl2.to(gltf.scene.position,
+                    {
+                        x: camera.position.x - 4.6,
+                        y: camera.position.y - 2,
+                        z: camera.position.z + 10,
+                        duration: 2,
+                        onComplete: function () {
+                            tieFighterFlightSound1.stop()
+                        }
+                    })
+
 
             }
-            
+
 
             // gui.add(gltf.scene.position, 'x').min(-30).max(30).step(0.01).name('T1' + String(i) +'Xaxis')
             // gui.add(gltf.scene.position, 'y').min(-5).max(30).step(0.01).name('T1' + String(i) +'Yaxis')
             // gui.add(gltf.scene.position, 'z').min(-40).max(30).step(0.01).name('T1' + String(i) +'Zaxis')
             //tieFighters.push(gltf.scene)
-        
-            
+
+
             updateAllMaterials()
 
         }
-    
+
     )
 
 }
@@ -514,16 +510,15 @@ for (let i =0; i < 2; i++)
 
 
 
- /**
- * Sizes
- */
+/**
+* Sizes
+*/
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -561,82 +556,82 @@ lightAtDeathStar.position.set(0, 21.5, 29.7)
 
 //  const lightAtPlanet = new THREE.HemisphereLight(0xffffff, 0.6)
 
-  scene.add(lightAtDeathStar)
+scene.add(lightAtDeathStar)
 //  const helper = new THREE.HemisphereLightHelper( lightAtDeathStar, 5 );
 //  scene.add( helper );
 
 
 fontLoader.load('/Fonts/STARWARS_Regular.json',
- (font) => 
- {
-     const textGeometry = new THREE.TextBufferGeometry(
-          'STAR WARS',
-          {
-              font: font,
-              size: 4,
-              height: 0.2,
-              curveSegments: 5,
-              bevelEnabled: true,
-              bevelThickness: 0.03,
-              bevelSize: 0.02,
-              bevelOffset: 0,
-              bevelSegments:4
-          }
-     )
+    (font) => {
+        const textGeometry = new THREE.TextBufferGeometry(
+            'STAR WARS',
+            {
+                font: font,
+                size: 4,
+                height: 0.2,
+                curveSegments: 5,
+                bevelEnabled: true,
+                bevelThickness: 0.03,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 4
+            }
+        )
 
-     textGeometry.center()
+        textGeometry.center()
 
-    const material = new THREE.MeshPhongMaterial() //{matcap:matcapTexture}
-    const text = new THREE.Mesh(textGeometry, material)
-    scene.add(text)
-    text.lookAt(camera.position)
-    text.position.y = 20
-    text.rotation.x = -6
-    //text.receiveLight = false
-    // gui.add(text.rotation, 'x').min(-10).max(10).step(0.1).name('Text Rotation')
-    // gui.add(text.position, 'y').min(0).max(45).step(0.1).name('Text Height')
-        }
- )
+        const material = new THREE.MeshPhongMaterial() //{matcap:matcapTexture}
+        const text = new THREE.Mesh(textGeometry, material)
+        scene.add(text)
+        text.lookAt(camera.position)
+        text.position.y = 20
+        text.rotation.x = -6
+        //text.receiveLight = false
+        // gui.add(text.rotation, 'x').min(-10).max(10).step(0.1).name('Text Rotation')
+        // gui.add(text.position, 'y').min(0).max(45).step(0.1).name('Text Height')
+    }
+)
 //test object 
 // const mesh = new THREE.Mesh( new THREE.SphereBufferGeometry(10,10,10), new THREE.MeshStandardMaterial())
 // scene.add(mesh)
 /**
  * GEOMETRY
  */
- const icePlanetTexture = textureLoader.load('/textures/planets/iceTEADoctored2.jpg')
- const icePlanetCloudsTexture = textureLoader.load('/textures/planets/earthclouds2k.png')
- 
-const icePlanetGeometry = new THREE.SphereBufferGeometry(60,60,60)
+const icePlanetTexture = textureLoader.load('/textures/planets/iceTEADoctored2.jpg')
+const icePlanetCloudsTexture = textureLoader.load('/textures/planets/earthclouds2k.png')
+
+const icePlanetGeometry = new THREE.SphereBufferGeometry(60, 60, 60)
 const icePlanetGeometryCloud = new THREE.SphereBufferGeometry(60.1, 60, 60)
-const icePlanetMaterial = new THREE.ShaderMaterial( 
-	{
-	    uniforms: 
-		{ 
-			"c":   { type: "f", value: 1.76 },
-			"p":   { type: "f", value: 1.06 },
-			glowColor: { type: "c", value: new THREE.Color('#212171') },
-			viewVector: { type: "v3", value: camera.position }
-		},
-		vertexShader:   vertexShader,
-		fragmentShader: fragmentShader,
-		side: THREE.BackSide,
-		blending: THREE.AdditiveBlending,
-		transparent: true
-	}   );
+const icePlanetMaterial = new THREE.ShaderMaterial(
+    {
+        uniforms:
+        {
+            "c": { type: "f", value: 1.76 },
+            "p": { type: "f", value: 1.06 },
+            glowColor: { type: "c", value: new THREE.Color('#212171') },
+            viewVector: { type: "v3", value: camera.position }
+        },
+        vertexShader: vertexShader,
+        fragmentShader: fragmentShader,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        transparent: true
+    });
 
 
 
-const icePlanetStruct = new THREE.MeshPhongMaterial({map: icePlanetTexture })
-const icePlanetCloud = new THREE.MeshPhongMaterial({ 
+const icePlanetStruct = new THREE.MeshPhongMaterial({ map: icePlanetTexture })
+const icePlanetCloud = new THREE.MeshPhongMaterial({
     map: icePlanetCloudsTexture,
     side: THREE.DoubleSide,
     opacity: 0.4,
     transparent: true,
-    depthWrite: false })
+    depthWrite: false
+})
 
 const icePlanetAtmosphere = new THREE.Mesh(icePlanetGeometryCloud, icePlanetMaterial)
 icePlanetAtmosphere.scale.multiplyScalar(1.004)
-const icePlanet = new THREE.Mesh( icePlanetGeometry, icePlanetStruct)
+const icePlanet = new THREE.Mesh(icePlanetGeometry, icePlanetStruct)
 const icePlanetClouds = new THREE.Mesh(icePlanetGeometryCloud, icePlanetCloud)
 scene.add(icePlanet)
 icePlanet.position.z = -35
@@ -657,7 +652,7 @@ controls.enableDamping = true
 /**
  * Renderer
  */
- const renderer = new THREE.WebGLRenderer({
+const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     antialias: true //Allows for smoother edges on models
 })
@@ -703,19 +698,18 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap
 /**
  * Animate
  */
- const clock = new THREE.Clock()
+const clock = new THREE.Clock()
 
- const tick = () =>
- {
-     //stats.begin()
-     const elapsedTime = clock.getElapsedTime()
+const tick = () => {
+    //stats.begin()
+    const elapsedTime = clock.getElapsedTime()
 
-     /**
-      * UPDATE OBJECTS
-      */
-     //Planet Geometry
-     icePlanetClouds.rotation.y = elapsedTime / 200
-     icePlanet.rotation.y = elapsedTime / 125
+    /**
+     * UPDATE OBJECTS
+     */
+    //Planet Geometry
+    icePlanetClouds.rotation.y = elapsedTime / 200
+    icePlanet.rotation.y = elapsedTime / 125
 
 
 
